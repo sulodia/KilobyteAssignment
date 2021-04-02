@@ -43,7 +43,7 @@
       var password = $('#userpassword').val();
        $.ajax({
         type: "POST",
-        url: '/Home/',
+        url: '/Home/Signin',
         datatype: "json",
         data: { 'userid': userid, 'password': password},
         success: function (r) {
