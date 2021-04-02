@@ -25,6 +25,34 @@ public class HomeController:Controller
       return Json(new {status = success,message = message});
   }
   
+  [HttpGet]
+  public IActionResult Uploadpdf()
+  {
+    return View();
+  }
+  [HttpPost]
+  public IActionResult UploadpdfApi()
+  {
+  string filePath = "https://ctapi.kilobytetech.com/api/folder/5e2c5b5d5323c70ae924a815/addPdf";
+  using (var httpClient = new HttpClient())
+  {
+    using (var form = new MultipartFormDataContent())
+    {
+      using (var fs = File.OpenRead(filePath))
+      {
+        using (var streamContent = new StreamContent(fs))
+         {
+           using (var fileContent = new ByteArrayContent(await streamContent.ReadAsByteArrayAsync()))
+             {
+               fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+               form.Add(fileContent, "file", Path.GetFileName(filePath));
+               HttpResponseMessage response = await httpClient.PostAsync(url, form);
+              }
+          }
+        }
+      }
+    }
+  }
   [NonAction]
   public Task<bool> CallLoginApi(string loginId,string loginpassword)
   {
