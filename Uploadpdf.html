@@ -23,10 +23,10 @@
     <div class="col-md-4">
       
       <div class="form-group">
-        <input type="file" class="btn btn-primary"/>
+        <input type="file" class="btn btn-primary" id="testfileId"/>
       </div>
       <div class="form-group">
-        <button type="button" claas="btn btn-primary">Upload</button>
+        <button type="button" claas="btn btn-primary" id="upload_btn">Upload</button>
       </div>
     </div>
     <div class="col-md-4"></div>
@@ -35,9 +35,35 @@
 </body>
 </html>
   <script>
-    UploadpdfApi
-  </script>
-  
-  <script>
+      $('#upload_btn').on('click',function(){
+      var test = $('#testfileId').val();
+      if (test.length == 0) {
+        $.notify({ title: '', message: 'Please select a file...!' }, { type: 'warning' });
+        return false;
+      }
+        var form_data = new FormData();
+          if (test.length) {
+        var testUpload = $("#testuploadfile").get(0);
+        var testfiles = testUpload.files;
+        form_data.append(testfiles[0].name, testfiles[0]);
+          }
+       $.ajax({
+        type: "POST",
+        url: '/Home/UploadpdfApi',        
+        data: form_data,
+        success: function (r) {
+            if (r.success) {
+                $.notify({ title: '', message: r.message }, { type: 'success' });
+                window.location.reload();
+            } else {
+                $.notify({ title: '', message: r.message }, { type: 'danger' });
+            }
+        },
+        error: function (r) {
+            $.notify({ title: '', message: r.message }, { type: 'danger' });
+        }
+        })
+    })
     
   </script>
+  
