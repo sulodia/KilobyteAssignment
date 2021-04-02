@@ -33,6 +33,8 @@ public class HomeController:Controller
   [HttpPost]
   public IActionResult UploadpdfApi()
   {
+  bool status=false;
+  string message ="something wents wrong";
   string filePath = "https://ctapi.kilobytetech.com/api/folder/5e2c5b5d5323c70ae924a815/addPdf";
   using (var httpClient = new HttpClient())
   {
@@ -47,11 +49,14 @@ public class HomeController:Controller
                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
                form.Add(fileContent, "file", Path.GetFileName(filePath));
                HttpResponseMessage response = await httpClient.PostAsync(url, form);
+               status = true;
+               message ="File added Successfully";
               }
           }
         }
       }
     }
+    return Json(new{success=status,message=message});
   }
   [NonAction]
   public Task<bool> CallLoginApi(string loginId,string loginpassword)
