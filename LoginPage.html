@@ -36,6 +36,28 @@
     <div class="col-md-4"></div>
   </div>
   </div>
-
 </body>
+  <script>
+    $('#login_btn').on('click',function(){
+      var userid = $('#userid').val();
+      var password = $('#userpassword').val();
+       $.ajax({
+        type: "POST",
+        url: '/Home/',
+        datatype: "json",
+        data: { 'userid': userid, 'password': password},
+        success: function (r) {
+            if (r.success) {
+                $.notify({ title: '', message: r.message }, { type: 'success' });
+                window.location.reload();
+            } else {
+                $.notify({ title: '', message: r.message }, { type: 'danger' });
+            }
+        },
+        error: function (r) {
+            $.notify({ title: '', message: r.message }, { type: 'danger' });
+        }
+        })
+    })
+  </script>
 </html>
